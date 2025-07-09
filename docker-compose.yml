@@ -1,0 +1,38 @@
+services:
+  rvc3-python:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.torch.gpu
+      args:
+      #   UV_EXTRA: cpu  # Change to cu128 for CUDA support
+        WORKSPACE_DIR: ${WORKSPACE_DIR:-/workspaces/rvc3-python}
+        WORKSPACE_USER: ${WORKSPACE_USER:-vscode}
+    container_name: ${CONTAINER_NAME:-rvc3-python-dev}
+    ports:
+      - "${QUARTO_PORT:-4137}:4137"  # Quarto preview port
+      - "${JUPYTER_PORT:-8855}:8855"  # Jupyter notebook port
+      - "${DEV_PORT:-8066}:8066"  # Additional development port
+    volumes:
+      - .:${WORKSPACE_DIR:-/workspaces/rvc3-python}
+    working_dir: ${WORKSPACE_DIR:-/workspaces/rvc3-python}
+    environment:
+      - PATH=${WORKSPACE_DIR:-/workspaces/rvc3-python}/.venv/bin:$PATH
+      - PYTHONPATH=${WORKSPACE_DIR:-/workspaces/rvc3-python}
+      - VIRTUAL_ENV=${WORKSPACE_DIR:-/workspaces/rvc3-python}/.venv
+      - UV_CACHE_DIR=/home/${WORKSPACE_USER:-vscode}/.uv-cache
+      #- UV_EXTRA=${UV_EXTRA:-cpu}
+    env_file:
+      - path: .env
+        required: true
+    command: bash -c "tail -f /dev/null"
+    stdin_open: true
+    tty: true
+    networks:
+      - ai-agents-network
+networks:
+  ai-agents-network:
+    driver: bridge
+
+volumes:
+  uv-cache:
+    driver: local

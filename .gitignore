@@ -24,3 +24,5 @@ OLD
 .vscode
 dist
 build
+*.egg-info/
+

@@ -15,7 +15,7 @@
 import os
 from pathlib import Path
 import sys
-from importlib.metadata import version
+from importlib.metadata import version as pkg_version
 import argparse
 
 from pygments.token import Token
@@ -183,17 +183,17 @@ for Python"""
 
     versions = []
     if args.robot:
-        versions.append(f"RTB=={version('roboticstoolbox-python')}")
+        versions.append(f"RTB=={pkg_version('roboticstoolbox-python')}")
     if args.vision:
-        versions.append(f"MVTB=={version('machinevision-toolbox-python')}")
+        versions.append(f"MVTB=={pkg_version('machinevision-toolbox-python')}")
     try:
-        versions.append(f"SG=={version('spatialmath-python')}")
+        versions.append(f"SG=={pkg_version('spatialmath-python')}")
     except:
         pass
-    versions.append(f"SMTB=={version('spatialmath-python')}")
-    versions.append(f"NumPy=={version('numpy')}")
-    versions.append(f"SciPy=={version('scipy')}")
-    versions.append(f"Matplotlib=={version('matplotlib')}")
+    versions.append(f"SMTB=={pkg_version('spatialmath-python')}")
+    versions.append(f"NumPy=={pkg_version('numpy')}")
+    versions.append(f"SciPy=={pkg_version('scipy')}")
+    versions.append(f"Matplotlib=={pkg_version('matplotlib')}")
 
     # create banner
     banner += " (" + ", ".join(versions) + ")"

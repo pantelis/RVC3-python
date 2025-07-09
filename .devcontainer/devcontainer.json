@@ -1,0 +1,52 @@
+// For format details, see https://aka.ms/devcontainer.json.
+{
+	"name": "RVC3",
+	"dockerComposeFile": "../docker-compose.yml",
+	"service": "rvc3-python",
+	"workspaceFolder": "/workspaces/rvc3-python",
+	"remoteUser": "vscode",
+	"postCreateCommand": "bash -c 'if [ -d \".venv\" ]; then source .venv/bin/activate && echo \"Dev container setup complete! Python available at: $(which python)\" && echo \"UV version: $(uv --version)\"; else echo \"Virtual environment not found. Please run: make start and source your environment\"; fi'",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"ms-toolsai.jupyter",
+				"ms-toolsai.vscode-jupyter-powertoys",
+				"ExecutableBookProject.myst-highlight",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"njpwerner.autodocstring",
+				"eamodio.gitlens",
+				"github.vscode-github-actions",
+				"jan-dolejsi.pddl",
+				"mechatroner.rainbow-csv",
+				"atlassian.atlascode",
+				"marimo-team.vscode-marimo",
+				"quarto.quarto",
+				"streetsidesoftware.code-spell-checker",
+				"RooVeterinaryInc.roo-cline",
+				"1Password.op-vscode",
+				"charliermarsh.ruff"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/workspaces/rvc3-python/.venv/bin/python",
+				"python.terminal.activateEnvironment": true,
+				"python.analysis.extraPaths": [
+					"/workspaces/rvc3-python"
+				],
+				"terminal.integrated.profiles.linux": {
+					"zsh": {
+						"path": "/bin/zsh"
+					}
+				},
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"dev.containers.copyGitConfig": true
+			}
+		}
+	},
+	"remoteEnv": {
+		"PATH": "/opt/conda/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+	}
+}
