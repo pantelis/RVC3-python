@@ -39,6 +39,127 @@ This book uses many examples based on the following open-source Python packages
 **Robotics Toolbox for Python**, **Machine Vision Toolbox for Python**, **Spatial Maths Toolbox for Python**, **Block Diagram Simulation for Python**.  These in turn have dependencies on other packages created by the author and
 third parties.
 
+## Using Docker for Development - easiest way to get started
+
+This repository includes Docker configurations for both CPU and GPU environments, making it easy to get started with a consistent development environment.
+
+### Docker Setup Options
+
+The project provides two Docker configurations:
+
+1. **CPU Version** (`docker/Dockerfile.torch.cpu`) - Lighter, works on any system
+2. **GPU Version** (`docker/Dockerfile.torch.gpu`) - Includes CUDA support for GPU acceleration
+
+### Quick Start with Docker
+
+#### Option 1: CPU Version (Recommended for most users)
+
+To use the CPU version, modify the `docker-compose.yml` file:
+
+```yaml
+services:
+  rvc3-python:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.torch.cpu  # Use CPU version
+      args:
+        UV_EXTRA: cpu  # Specify CPU extras
+        WORKSPACE_DIR: ${WORKSPACE_DIR:-/workspaces/rvc3-python}
+        WORKSPACE_USER: ${WORKSPACE_USER:-vscode}
+```
+
+Then launch the container:
+```bash
+docker-compose up -d
+```
+
+#### Option 2: GPU Version (For CUDA-enabled systems)
+
+To use the GPU version with CUDA support, modify the `docker-compose.yml` file:
+
+```yaml
+services:
+  rvc3-python:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.torch.gpu  # Use GPU version
+      args:
+        UV_EXTRA: cu128  # Specify CUDA extras
+        WORKSPACE_DIR: ${WORKSPACE_DIR:-/workspaces/rvc3-python}
+        WORKSPACE_USER: ${WORKSPACE_USER:-vscode}
+```
+
+Then launch the container:
+```bash
+docker-compose up -d
+```
+
+### Post-Launch Setup
+
+After the Docker container is running, you need to set up the development environment:
+
+1. **Enter the container**:
+   ```bash
+   docker-compose exec rvc3-python bash
+   ```
+
+2. **Run the setup command**:
+   ```bash
+   make start
+   ```
+
+The `make start` command will:
+- Recreate the virtual environment
+- Sync dependencies with `uv`
+- Install the package in development mode
+- Prepare the development environment
+
+3. **Activate the virtual environment** (if needed):
+   ```bash
+   source .venv/bin/activate
+   ```
+
+### Available Ports
+
+The Docker setup exposes several ports for different services:
+- **4137**: Quarto preview port
+- **8855**: Jupyter notebook port  
+- **8066**: Additional development port
+
+### Environment Variables
+
+You can customize the Docker setup using environment variables in a `.env` file:
+
+```bash
+WORKSPACE_DIR=/workspaces/rvc3-python
+WORKSPACE_USER=vscode
+CONTAINER_NAME=rvc3-python-dev
+QUARTO_PORT=4137
+JUPYTER_PORT=8855
+DEV_PORT=8066
+```
+
+### Docker Commands Summary
+
+```bash
+# Build and start container
+docker-compose up -d
+
+# Enter the container
+docker-compose exec rvc3-python bash
+
+# Set up development environment (run inside container)
+make start
+
+# Stop the container
+docker-compose down
+
+# Rebuild the container (after changing Dockerfile)
+docker-compose build --no-cache
+```
+
+## Manual Installation 
+
 ## Installing the package
 
 This package provides a simple one-step installation of *all* the required Toolboxes
@@ -256,6 +377,7 @@ as best they can in these environments.
 For local use the [Jupyter plugin for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) is pretty decent.  Colab suffers
 from old versions of major packages (though they are getting better at keeping up to date)
 and animations can suffer from slow update over the network.
+
 ## Other command line tools
 
 Additional command line tools available (from the Robotics Toolbox) include:
@@ -265,6 +387,7 @@ Additional command line tools available (from the Robotics Toolbox) include:
 - `twistdemo`, Swift visualization that lets you experiment with 3D twists. The screw axis is the blue rod and you can
    position and orient it using the sliders, and adjust its pitch. Then apply a rotation
    about the screw using the bottom slider.
+
 # Block diagram models
 
 <a href="https://github.com/petercorke/bdsim"><img

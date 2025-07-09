@@ -82,6 +82,12 @@ RUN pip3 install torch torchvision torchaudio --index-url https://download.pytor
 # Install UV with caching
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
+# Copy the constraint file - we respect the existing package versions
+RUN mkdir -p /etc/pip
+RUN pip list --format=freeze > /etc/pip/constraint.txt
+# This is a workaround to avoid issues with fsspec version 2025.5.1 as it conflicts with HF datasets 3.6.0
+RUN sed -i 's/^fsspec==2025\.5\.1$/fsspec==2025.3.0/' /etc/pip/constraint.txt
+
 # Install Node.js (required for some Quarto extensions)
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs

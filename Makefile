@@ -11,7 +11,7 @@ UV := /usr/bin/uv
 # Create venv using uv
 $(VENV_DIR)/bin/activate:
 	rm -rf $(VENV_DIR)
-	$(UV) venv $(VENV_DIR) --python 3.10
+	$(UV) venv $(VENV_DIR)  --system-site-packages
 
 venv: $(VENV_DIR)/bin/activate
 
@@ -68,10 +68,10 @@ test-examples: install-dev
 
 # Dependency management
 deps-update: venv
-	$(UV) pip compile --python $(VENV_PY) pyproject.toml --upgrade
+	$(UV) pip compile --python $(VENV_PY) pyproject.toml --upgrade $(CONSTRAINTS)
 
 deps-sync: venv
-	$(UV) sync --python $(VENV_PY)
+	$(UV) sync --python $(VENV_PY) $(CONSTRAINTS) | $(UV) pip sync -
 
 deps-table-update: venv
 	$(VENV_PY) utils/update_dependency_table.py
@@ -88,7 +88,8 @@ build: clean
 	$(UV) build
 
 build-install: build
-	$(UV) pip install --python $(VENV_PY) dist/*.whl
+	$(UV) pip install --python $(VENV_PY) dist/*.whl $(CONSTRAINTS)
+
 
 # Utility targets
 venv-recreate:

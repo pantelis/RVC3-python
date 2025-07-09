@@ -4,7 +4,7 @@ version = "0.9.2"
 authors = [{ name = "Peter Corke", email = "rvc@petercorke.com" }]
 description = "Support for book: Robotics, Vision & Control 3 in Python"
 readme = "README.md"
-requires-python = "==3.10.14"
+requires-python = ">=3.10, < 3.11"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     # Indicate who your project is intended for
